@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:habit_tracker/features/domain/entities/user_entity.dart';
 
-abstract class FirebaseRepository {
+abstract class FirebaseRemoteDataSource {
   // Credential
   Future<void> signUpUser(UserEntity userEntity);
   Future<void> signInUser(UserEntity userEntity);
@@ -17,5 +17,5 @@ abstract class FirebaseRepository {
   Future<void> updateUser(UserEntity userEntity);
 
   // Storage
-  Future<String> uploadImageToStorage(File? file, String childName);
+   Future<String> uploadImageToStorage(File? file, String childName);
 }
