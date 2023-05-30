@@ -12,6 +12,7 @@ import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/cr
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/get_current_uid_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/get_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/is_sign_in_usecase.dart';
+import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/reset_password_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_in_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_out_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_up_user_usecase.dart';
@@ -31,7 +32,7 @@ Future<void> init() async {
       getCurrentUidUsecase: sl.call()));
 
   sl.registerFactory(() => CredentialCubit(
-      signInUserUsecase: sl.call(), signUpUserUsecase: sl.call()));
+      signInUserUsecase: sl.call(), signUpUserUsecase: sl.call(), resetPasswordUseCase: sl.call()));
   sl.registerFactory(
       () => UserCubit(getUserUsecase: sl.call(), updateUserUseCase: sl.call()));
 
@@ -45,6 +46,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUserUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => UpdateUserUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => CreateUserUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => ResetPasswordUseCase(repository: sl.call()));
   sl.registerLazySingleton(
       () => CreateUserWithImageUseCase(repository: sl.call()));
 

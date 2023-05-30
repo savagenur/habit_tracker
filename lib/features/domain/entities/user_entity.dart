@@ -22,7 +22,7 @@ class UserEntity extends Equatable {
     this.profileUrl,
     this.totalHabits,
     this.imageFile,
-    this.password,
+    this.password, 
   });
 
   @override

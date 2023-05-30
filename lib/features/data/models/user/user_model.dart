@@ -17,8 +17,8 @@ class UserModel extends UserEntity {
     this.totalHabits,
   }) : super(
           uid: uid,
-          username: username,
           name: name,
+          username: username,
           email: email,
           profileUrl: profileUrl,
           totalHabits: totalHabits,

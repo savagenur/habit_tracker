@@ -15,6 +15,7 @@ abstract class FirebaseRepository {
   Future<void> createUser(UserEntity userEntity);
   Future<void> createUserWithImage(UserEntity userEntity, String profileUrl);
   Future<void> updateUser(UserEntity userEntity);
+  Future<void> resetPassword(String email);
 
   // Storage
   Future<String> uploadImageToStorage(File? file, String childName);

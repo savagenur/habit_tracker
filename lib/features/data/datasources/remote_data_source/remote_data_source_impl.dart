@@ -62,7 +62,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   @override
   Future<void> signInUser(UserEntity userEntity) async {
     try {
-      if (userEntity.email!.isNotEmpty || userEntity.password!.isNotEmpty) {
+      if (userEntity.email!.isNotEmpty && userEntity.password!.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: userEntity.email!, password: userEntity.password!);
       } else {
@@ -70,10 +70,16 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        toast("User not found!");
+        toast("${e.code}");
+        print("asdasdasdas" + e.code);
+      }
+      if (e.code == "invalid-email") {
+        toast("Invalid email");
       }
       if (e.code == "wrong-password") {
         toast("Invalid email or password!");
+      } else {
+        toast("${e.code}");
       }
     }
   }
@@ -117,7 +123,10 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       userInformation['name'] = userEntity.name;
     }
     if (userEntity.username != null && userEntity.username != '') {
-      userInformation['name'] = userEntity.username;
+      userInformation['username'] = userEntity.username;
+    }
+    if (userEntity.profileUrl != null && userEntity.profileUrl != '') {
+      userInformation['profileUrl'] = userEntity.profileUrl;
     }
     userCollection.doc(userEntity.uid).update(userInformation);
   }
@@ -128,7 +137,6 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         .ref()
         .child(childName)
         .child(firebaseAuth.currentUser!.uid);
-
     final uploadTask = ref.putFile(file!);
     final imageUrl =
         (await uploadTask.whenComplete(() {})).ref.getDownloadURL();
@@ -157,5 +165,10 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     }).catchError((error) {
       toast("Error: $error");
     });
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    return await firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }

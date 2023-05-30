@@ -42,7 +42,12 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   }
 
   @override
-  Future<String> uploadImageToStorage(File? file, String childName) async{
+  Future<String> uploadImageToStorage(File? file, String childName) async {
     return remoteDataSource.uploadImageToStorage(file, childName);
+  }
+
+  @override
+  Future<void> resetPassword(String email) {
+    return remoteDataSource.resetPassword(email);
   }
 }
