@@ -6,6 +6,7 @@ import 'package:habit_tracker/features/data/datasources/remote_data_source/remot
 import 'package:habit_tracker/features/data/datasources/remote_data_source/remote_data_source_impl.dart';
 import 'package:habit_tracker/features/data/repositories/firebase_repository_impl.dart';
 import 'package:habit_tracker/features/domain/repositories/firebase_repository.dart';
+import 'package:habit_tracker/features/domain/usecases/firebase_usecases/habit/get_started_at_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/storage/upload_image_to_storage_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/create_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/create_user_with_image_usecase.dart';
@@ -17,9 +18,17 @@ import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/si
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_out_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_up_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/update_user_usecase.dart';
+import 'package:habit_tracker/features/presentation/bloc/habits/bloc/habits_bloc.dart';
 import 'package:habit_tracker/features/presentation/cubit/auth/cubit/auth_cubit.dart';
 import 'package:habit_tracker/features/presentation/cubit/credential/cubit/credential_cubit.dart';
 import 'package:habit_tracker/features/presentation/cubit/user/cubit/user_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'features/domain/usecases/firebase_usecases/habit/create_habit_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/habit/delete_habit_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/habit/get_habits_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/habit/load_data_habit_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/habit/update_habit_usecase.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -32,9 +41,19 @@ Future<void> init() async {
       getCurrentUidUsecase: sl.call()));
 
   sl.registerFactory(() => CredentialCubit(
-      signInUserUsecase: sl.call(), signUpUserUsecase: sl.call(), resetPasswordUseCase: sl.call()));
+      signInUserUsecase: sl.call(),
+      signUpUserUsecase: sl.call(),
+      resetPasswordUseCase: sl.call()));
   sl.registerFactory(
       () => UserCubit(getUserUsecase: sl.call(), updateUserUseCase: sl.call()));
+
+  sl.registerFactory(() => HabitsBloc(
+      loadDataHabitUsecase: sl.call(),
+      getHabitsUsecase: sl.call(),
+      createHabitUsecase: sl.call(),
+      deleteHabitUsecase: sl.call(),
+      updateHabitUsecase: sl.call(),
+      getStartedAtUsecase: sl.call()));
 
   // UseCases
 
@@ -54,6 +73,14 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => UploadImageToStorageUsecase(repository: sl.call()));
 
+  // Habits Usecases
+  sl.registerLazySingleton(() => LoadDataHabitUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => GetHabitsUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => CreateHabitUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => DeleteHabitUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => UpdateHabitUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => GetStartedAtUsecase(repository: sl.call()));
+
   // Repository
   sl.registerLazySingleton<FirebaseRepository>(
       () => FirebaseRepositoryImpl(remoteDataSource: sl.call()));
@@ -66,11 +93,12 @@ Future<void> init() async {
           firebaseStorage: sl.call()));
 
   // Externals
-
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseFirestore = FirebaseFirestore.instance;
   final firebaseStorage = FirebaseStorage.instance;
+  final sharedPreferences = await SharedPreferences.getInstance();
 
+  sl.registerSingleton<SharedPreferences>(sharedPreferences);
   sl.registerLazySingleton(() => firebaseAuth);
   sl.registerLazySingleton(() => firebaseFirestore);
   sl.registerLazySingleton(() => firebaseStorage);

@@ -20,7 +20,7 @@ class ButtonContainerWidget extends StatelessWidget {
 
         ),
         child: Center(
-          child: Text("$text", style: const TextStyle(color: primaryColor,fontWeight: FontWeight.w600),),
+          child: Text(text, style: const TextStyle(color: primaryColor,fontWeight: FontWeight.w600),),
         ),
       ));
   }

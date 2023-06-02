@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/main.dart';
 
 import '../../../../constants.dart';
 import '../../cubit/auth/cubit/auth_cubit.dart';
@@ -17,8 +16,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isSigningIn = false;
   @override
   void dispose() {
@@ -150,7 +149,7 @@ class _SignInPageState extends State<SignInPage> {
 
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, PageConst.forgotPasswordPage),
-              child: Text(
+              child: const Text(
                 "Forgot Password?",
                 style: TextStyle(
                   color: blueColor,
@@ -164,7 +163,7 @@ class _SignInPageState extends State<SignInPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Please wait...",
                             style: TextStyle(
                               color: primaryColor,
@@ -173,7 +172,7 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ),
                           sizeHor(5),
-                          CircularProgressIndicator(),
+                          const CircularProgressIndicator(),
                         ],
                       )
                     ],

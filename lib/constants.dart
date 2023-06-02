@@ -23,16 +23,18 @@ class PageConst {
   static const String editProfilePage = "editProfilePage";
   static const String homePage = "homePage";
   static const String forgotPasswordPage = "forgotPasswordPage";
-  static const String commentPage = "commentPage";
+  static const String createHabitPage = "createHabitPage";
+  static const String updateHabitPage = "updateHabitPage";
   static const String signInPage = "signInPage";
   static const String signUpPage = "signUpPage";
 }
 
 class FirebaseConst {
   static const String users = "users";
-  static const String posts = "posts";
-  static const String comment = "comment";
-  static const String reply = "reply";
+  static const String habits = "habits";
+  static const String habitList = "habitList";
+  static const String currentHabitList = "currentHabitList";
+  static const String todaysHabitList = "todaysHabitList";
 }
 
 void toast(String message) {

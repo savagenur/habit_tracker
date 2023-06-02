@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/main.dart';
 import 'package:habit_tracker/profile_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../constants.dart';
-import '../../../domain/entities/user_entity.dart';
+import '../../../domain/entities/user/user_entity.dart';
 import '../../cubit/auth/cubit/auth_cubit.dart';
 import '../../cubit/credential/cubit/credential_cubit.dart';
 import '../../widgets/button_container_widget.dart';
@@ -22,10 +21,10 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _bioController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
 
   bool _isSigningUp = false;
 
@@ -43,6 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Future selectImage() async {
     try {
       final pickedFile =
+          // ignore: invalid_use_of_visible_for_testing_member
           await ImagePicker.platform.getImage(source: ImageSource.gallery);
 
       setState(() {
@@ -190,7 +190,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Please wait...",
                         style: TextStyle(
                           color: primaryColor,
@@ -199,7 +199,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       sizeHor(5),
-                      CircularProgressIndicator(),
+                      const CircularProgressIndicator(),
                     ],
                   )
                 : Container(),

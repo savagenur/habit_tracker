@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:habit_tracker/features/domain/entities/user_entity.dart';
+import 'package:habit_tracker/features/domain/entities/user/user_entity.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/get_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/update_user_usecase.dart';
 

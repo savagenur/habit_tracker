@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:habit_tracker/features/data/datasources/remote_data_source/remote_data_source.dart';
-import 'package:habit_tracker/features/domain/entities/user_entity.dart';
+import 'package:habit_tracker/features/domain/entities/habit/habit_entity.dart';
+import 'package:habit_tracker/features/domain/entities/user/user_entity.dart';
 import 'package:habit_tracker/features/domain/repositories/firebase_repository.dart';
 
 class FirebaseRepositoryImpl implements FirebaseRepository {
@@ -50,4 +51,45 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   Future<void> resetPassword(String email) {
     return remoteDataSource.resetPassword(email);
   }
+
+  @override
+  Future<void> copyCollection(
+      {required sourceCollection,
+      required destCollection,
+      bool isNewDay = false,bool isDelete=false}) async {
+    return remoteDataSource.copyCollection(
+        sourceCollection: sourceCollection,
+        destCollection: destCollection,
+        );
+  }
+
+  @override
+  Future<void> createHabit({required HabitEntity habitEntity}) async {
+    return remoteDataSource.createHabit(habitEntity: habitEntity);
+  }
+
+  @override
+  Future<void> deleteHabit(String habitId) async =>
+      remoteDataSource.deleteHabit(habitId);
+
+  @override
+  Stream<List<HabitEntity>> getHabits(String uid)  => remoteDataSource.getHabits(uid);
+
+  @override
+  Future<List> getListOfCollHabit() async =>
+      remoteDataSource.getListOfCollHabit();
+
+  @override
+  Future<String?> getStartedAt() async => remoteDataSource.getStartedAt();
+
+  @override
+  Future<void> loadDataHabit() async => remoteDataSource.loadDataHabit();
+
+  @override
+  Future<void> updateDatabaseHabit() async =>
+      remoteDataSource.updateDatabaseHabit();
+
+  @override
+  Future<void> updateHabit(HabitEntity habitEntity) async =>
+      remoteDataSource.updateHabit(habitEntity);
 }

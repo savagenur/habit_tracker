@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/main.dart';
 
 import '../../../../constants.dart';
-import '../../cubit/auth/cubit/auth_cubit.dart';
 import '../../cubit/credential/cubit/credential_cubit.dart';
 import '../../widgets/button_container_widget.dart';
 import '../../widgets/form_container_widget.dart';
@@ -16,7 +14,7 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   bool _isSigningIn = false;
   @override
   void dispose() {
@@ -68,7 +66,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Please wait...",
                             style: TextStyle(
                               color: primaryColor,
@@ -77,7 +75,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                           ),
                           sizeHor(5),
-                          CircularProgressIndicator(),
+                          const CircularProgressIndicator(),
                         ],
                       )
                     ],

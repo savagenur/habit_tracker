@@ -12,10 +12,10 @@ Widget profileWidget(String? imageUrl, File? image) {
       );
     } else {
       return CachedNetworkImage(
-        imageUrl: "$imageUrl",
+        imageUrl: imageUrl,
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, progress) =>
-            CircularProgressIndicator(),
+            const CircularProgressIndicator(),
         errorWidget: (context, url, error) => Image.asset(
           "assets/profile_default.png",
           fit: BoxFit.cover,

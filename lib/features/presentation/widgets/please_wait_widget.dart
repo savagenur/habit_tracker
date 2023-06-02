@@ -9,7 +9,7 @@ Widget pleaseWaitWidget() {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Please wait...",
             style: TextStyle(
               color: primaryColor,
@@ -18,7 +18,7 @@ Widget pleaseWaitWidget() {
             ),
           ),
           sizeHor(5),
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
         ],
       )
     ],

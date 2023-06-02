@@ -6,7 +6,6 @@ import 'package:habit_tracker/features/presentation/cubit/credential/cubit/crede
 import 'package:habit_tracker/on_generate_route.dart';
 import 'features/presentation/cubit/user/cubit/user_cubit.dart';
 import 'features/presentation/pages/credentials/sign_in_page.dart';
-import 'features/presentation/pages/credentials/sign_up_page.dart';
 import 'features/presentation/pages/home/home_page.dart';
 import 'injection_container.dart' as di;
 
@@ -45,9 +44,9 @@ class MyApp extends StatelessWidget {
           "/":(context) => BlocBuilder<AuthCubit, AuthState>(
             builder: (context, authState) {
               if (authState is Authenticated) {
-                return HomePage(uid:authState.uid);
+                return HomePage(uid: authState.uid);
               } else {
-                return SignInPage();
+                return const SignInPage();
               }
             },
           ),
@@ -56,5 +55,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

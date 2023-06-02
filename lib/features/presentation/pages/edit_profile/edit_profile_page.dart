@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_tracker/features/domain/entities/user_entity.dart';
+import 'package:habit_tracker/features/domain/entities/user/user_entity.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/storage/upload_image_to_storage_usecase.dart';
+import 'package:habit_tracker/features/presentation/cubit/auth/cubit/auth_cubit.dart';
 
 import 'package:habit_tracker/features/presentation/cubit/user/cubit/user_cubit.dart';
 import 'package:habit_tracker/features/presentation/widgets/button_container_widget.dart';
@@ -66,13 +67,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Profile"),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(
+              right: 20,
+            ),
+            child: GestureDetector(
+              onTap: () => BlocProvider.of<AuthCubit>(context).loggedOut().then((value) => Navigator.pushNamedAndRemoveUntil(context, PageConst.signInPage, (route) => false)),
+              child: Icon(Icons.logout)),
+          )
+        ],
       ),
       body: Padding(
           padding: EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(flex: 1  ,),
+              Spacer(
+                flex: 1,
+              ),
               Container(
                 width: 80,
                 height: 80,
@@ -130,8 +143,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ],
                     )
                   : Container(),
-              Spacer(flex: 2  ,),
-
+              Spacer(
+                flex: 2,
+              ),
             ],
           )),
     );

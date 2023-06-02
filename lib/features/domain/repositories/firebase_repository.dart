@@ -1,6 +1,8 @@
 import 'dart:io';
 
-import 'package:habit_tracker/features/domain/entities/user_entity.dart';
+import 'package:habit_tracker/features/domain/entities/user/user_entity.dart';
+
+import '../entities/habit/habit_entity.dart';
 
 abstract class FirebaseRepository {
   // Credential
@@ -19,4 +21,18 @@ abstract class FirebaseRepository {
 
   // Storage
   Future<String> uploadImageToStorage(File? file, String childName);
+
+  // Habit
+  Future<void> loadDataHabit();
+  Future<String?> getStartedAt();
+  Future<void> copyCollection(
+      {required sourceCollection,
+      required destCollection,
+      bool isNewDay = false,bool isDelete=false});
+  Future<void> updateDatabaseHabit();
+  Future<List> getListOfCollHabit();
+  Future<void> createHabit({required HabitEntity habitEntity});
+  Future<void> updateHabit(HabitEntity habitEntity);
+  Future<void> deleteHabit(String habitId);
+  Stream<List<HabitEntity>> getHabits(String uid);
 }
