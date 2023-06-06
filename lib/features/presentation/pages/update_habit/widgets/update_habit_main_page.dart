@@ -106,6 +106,8 @@ class _UpdateHabitMainPageState extends State<UpdateHabitMainPage> {
               child: ElevatedButton.icon(
                   onPressed: () {
                     BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEvent(
+                        habitId: widget.habitEntity.habitId!,
+                        isChangedOnlyCheckBool: false,
                         day: widget.selectedDay,
                         habitEntity: HabitEntity(
                           habitId: widget.habitEntity.habitId,

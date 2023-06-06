@@ -7,7 +7,7 @@ class UpdateHabitUsecase {
     required this.repository,
   });
 
-  Future<void> call({required HabitEntity habitEntity, required String day}) {
-    return repository.updateHabit(habitEntity,day);
+  Future<void> call({required HabitEntity habitEntity, required String day,required String habitId, required bool isChangedOnlyCheckBool}) {
+    return repository.updateHabit(habitEntity,day, habitId,  isChangedOnlyCheckBool);
   }
 }

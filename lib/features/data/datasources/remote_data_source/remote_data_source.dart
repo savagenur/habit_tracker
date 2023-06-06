@@ -32,7 +32,7 @@ abstract class FirebaseRemoteDataSource {
   Future<void> updateDatabaseHabit();
   Future<List> getListOfCollHabit();
   Future<void> createHabit({required HabitEntity habitEntity});
-  Future<void> updateHabit(HabitEntity habitEntity,String habitId);
+  Future<void> updateHabit(HabitEntity habitEntity,String day,String habitId, bool isChangedOnlyCheckBool);
   Future<void> deleteHabit(String habitId);
   Stream<List<HabitEntity>> getHabits(String uid,String dayString);
 

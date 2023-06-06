@@ -117,10 +117,14 @@ class _HomePageMainWidgetState extends State<HomePageMainWidget> {
                                     var habit = habitsState.habits[index];
                                     var updatedHabit =
                                         habit.copyWith(isCompleted: value);
-                                    BlocProvider.of<HabitsBloc>(context).add(
-                                        UpdateHabitEvent(
-                                            habitEntity: updatedHabit,
-                                            day: calendarState.selectedDay));
+                                    BlocProvider.of<HabitsBloc>(context)
+                                        .add(UpdateHabitEvent(
+                                      habitEntity: updatedHabit,
+                                      day: calendarState.selectedDay,
+                                      habitId:
+                                          habitsState.habits[index].habitId!,
+                                      isChangedOnlyCheckBool: true,
+                                    ));
                                   },
                                   deleteTapped: (context) {
                                     BlocProvider.of<HabitsBloc>(context).add(

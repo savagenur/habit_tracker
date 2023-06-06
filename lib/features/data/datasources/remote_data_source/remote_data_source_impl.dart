@@ -358,59 +358,102 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
-  Future<void> updateHabit(HabitEntity habitEntity, String day) async {
+  Future<void> updateHabit(HabitEntity habitEntity, String day, String habitId,
+      bool isChangedOnlyCheckBool) async {
     final uid = await getCurrentUid();
 
-    if (day == todaysDateFormatted()) {
+    final todaysHabitList = firebaseFirestore
+        .collection(FirebaseConst.habits)
+        .doc(uid)
+        .collection(day);
+
+// for Today
+    if (day == FirebaseConst.todaysHabitList) {
       final todaysHabitList = firebaseFirestore
           .collection(FirebaseConst.habits)
           .doc(uid)
           .collection(FirebaseConst.todaysHabitList);
-
       Map<String, dynamic> habitInformation = {};
-      if (habitEntity.title != '' && habitEntity.title != null) {
-        habitInformation['title'] = habitEntity.title;
-      }
-      if (habitEntity.description != '' && habitEntity.description != null) {
-        habitInformation['description'] = habitEntity.description;
-      }
-      // ignore: unrelated_type_equality_checks
-      if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
-        habitInformation['isCompleted'] = habitEntity.isCompleted;
-      }
+      if (isChangedOnlyCheckBool) {
+        // ignore: unrelated_type_equality_checks
+        if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
+          habitInformation['isCompleted'] = habitEntity.isCompleted;
+        }
+        await updateDatabaseHabit();
 
-      try {
-        await todaysHabitList.doc(habitEntity.habitId).update(habitInformation);
-      } catch (e) {
-        toast("$e");
+        try {
+          await todaysHabitList
+              .doc(habitEntity.habitId)
+              .update(habitInformation);
+        } catch (e) {
+          toast("$e");
+        }
+      } else {
+        final collectionPaths = await getListOfCollHabit();
+
+        if (habitEntity.title != '' && habitEntity.title != null) {
+          habitInformation['title'] = habitEntity.title;
+        }
+        if (habitEntity.description != '' && habitEntity.description != null) {
+          habitInformation['description'] = habitEntity.description;
+        }
+        if (habitEntity.executionFrequency != '' &&
+            habitEntity.executionFrequency != null) {
+          habitInformation['executionFrequency'] =
+              habitEntity.executionFrequency;
+        }
+        WriteBatch batch = FirebaseFirestore.instance.batch();
+        for (String path in collectionPaths) {
+          DocumentReference docRef = FirebaseFirestore.instance
+              .collection("habits")
+              .doc(uid)
+              .collection(path)
+              .doc(habitId);
+          batch.update(docRef, habitInformation);
+        }
+        await batch.commit();
       }
-      await updateDatabaseHabit();
     } else {
-      final todaysHabitList = firebaseFirestore
-          .collection(FirebaseConst.habits)
-          .doc(uid)
-          .collection(day);
-
       Map<String, dynamic> habitInformation = {};
-      if (habitEntity.title != '' && habitEntity.title != null) {
-        habitInformation['title'] = habitEntity.title;
-      }
-      if (habitEntity.description != '' && habitEntity.description != null) {
-        habitInformation['description'] = habitEntity.description;
-      }
-      // ignore: unrelated_type_equality_checks
-      if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
-        habitInformation['isCompleted'] = habitEntity.isCompleted;
-      }
+      if (isChangedOnlyCheckBool) {
+        // ignore: unrelated_type_equality_checks
+        if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
+          habitInformation['isCompleted'] = habitEntity.isCompleted;
+        }
 
-      try {
-        await todaysHabitList.doc(habitEntity.habitId).update(habitInformation);
-      } catch (e) {
-        toast("$e");
+        try {
+          await todaysHabitList
+              .doc(habitEntity.habitId)
+              .update(habitInformation);
+        } catch (e) {
+          toast("$e");
+        }
+      } else {
+        final collectionPaths = await getListOfCollHabit();
+
+        if (habitEntity.title != '' && habitEntity.title != null) {
+          habitInformation['title'] = habitEntity.title;
+        }
+        if (habitEntity.description != '' && habitEntity.description != null) {
+          habitInformation['description'] = habitEntity.description;
+        }
+        if (habitEntity.executionFrequency != '' &&
+            habitEntity.executionFrequency != null) {
+          habitInformation['executionFrequency'] =
+              habitEntity.executionFrequency;
+        }
+        WriteBatch batch = FirebaseFirestore.instance.batch();
+        for (String path in collectionPaths) {
+          DocumentReference docRef = FirebaseFirestore.instance
+              .collection("habits")
+              .doc(uid)
+              .collection(path)
+              .doc(habitId);
+          batch.update(docRef, habitInformation);
+        }
+        await batch.commit();
       }
     }
-
-    
   }
 
   @override

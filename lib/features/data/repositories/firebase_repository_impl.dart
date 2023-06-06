@@ -92,8 +92,8 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       remoteDataSource.updateDatabaseHabit();
 
   @override
-  Future<void> updateHabit(HabitEntity habitEntity,String day) async =>
-      remoteDataSource.updateHabit(habitEntity,day);
+  Future<void> updateHabit(HabitEntity habitEntity,String day,String habitId, bool isChangedOnlyCheckBool) async =>
+      remoteDataSource.updateHabit(habitEntity,day, habitId, isChangedOnlyCheckBool);
 
   @override
   Future<Map> getCalendarDoneMap(String uid) async =>

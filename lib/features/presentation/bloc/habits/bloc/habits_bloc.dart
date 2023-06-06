@@ -105,7 +105,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       UpdateHabitEvent event, Emitter<HabitsState> emit) async {
     try {
       await updateHabitUsecase.call(
-          habitEntity: event.habitEntity, day: event.day);
+          habitEntity: event.habitEntity, day: event.day,habitId: event.habitId ,isChangedOnlyCheckBool: event.isChangedOnlyCheckBool);
     } catch (e) {
       emit(HabitsFailure());
     }

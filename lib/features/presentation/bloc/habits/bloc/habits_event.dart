@@ -23,9 +23,13 @@ class LoadDataHabitEvent extends HabitsEvent {
 class UpdateHabitEvent extends HabitsEvent {
   final HabitEntity habitEntity;
   final String day;
+  final String habitId;
+  final bool isChangedOnlyCheckBool;
   const UpdateHabitEvent({
     required this.habitEntity,
     required this.day,
+    required this.habitId,
+    required this.isChangedOnlyCheckBool,
   });
 }
 class DeleteHabitEvent extends HabitsEvent {
