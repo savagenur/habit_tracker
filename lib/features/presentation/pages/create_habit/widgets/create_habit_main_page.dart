@@ -26,6 +26,14 @@ class _CreateHabitMainHabitPageState extends State<CreateHabitMainHabitPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    executionFrequencyController.dispose();
+    super.dispose();
+  }
+
   void _onTextChanged() {
     setState(() {
       isTitleEmpty = titleController.text.isEmpty;
@@ -80,8 +88,7 @@ class _CreateHabitMainHabitPageState extends State<CreateHabitMainHabitPage> {
         ),
       ),
       bottomNavigationBar: isTitleEmpty
-          ? 
-          const SizedBox(
+          ? const SizedBox(
               height: 0,
               width: 0,
             )
@@ -93,12 +100,12 @@ class _CreateHabitMainHabitPageState extends State<CreateHabitMainHabitPage> {
                         habitEntity: HabitEntity(
                       title: titleController.text,
                       description: descriptionController.text,
-                      executionFrequency: executionFrequencyController.text.toString(),
+                      executionFrequency:
+                          executionFrequencyController.text.toString(),
                       color: pickedColor,
                     )));
                     Navigator.pop(context);
                   },
-                  
                   icon: const Icon(Icons.add),
                   label: const Text("Add to Habits")),
             ),

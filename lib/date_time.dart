@@ -1,4 +1,6 @@
 // return todays date formatted as yyyymmdd
+import 'package:intl/intl.dart';
+
 String todaysDateFormatted() {
   DateTime dateTimeObject = DateTime.now();
 
@@ -25,6 +27,13 @@ DateTime createDateTimeObject(String yyyymmdd) {
 
   DateTime dateTimeObject = DateTime(yyyy, mm, dd);
   return dateTimeObject;
+}
+
+String convertDateTimeZToString(DateTime dateTimeZ) {
+  // Format the date as a string without the time zone indicator
+  String formattedDate =
+      DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(dateTimeZ);
+  return formattedDate;
 }
 
 // return todays date formatted as yyyymmdd

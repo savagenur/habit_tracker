@@ -30,6 +30,10 @@ class HabitsLoading extends HabitsState {
   @override
   List<Object> get props => [];
 }
+class ChosenHabitsLoading extends HabitsState {
+  @override
+  List<Object> get props => [];
+}
 
 class HabitsFailure extends HabitsState {
   @override

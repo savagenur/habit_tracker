@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_tracker/constants.dart';
+import 'package:habit_tracker/date_time.dart';
 import 'package:habit_tracker/features/domain/entities/habit/habit_entity.dart';
 import 'package:habit_tracker/features/presentation/bloc/habits/bloc/habits_bloc.dart';
 import 'package:habit_tracker/features/presentation/widgets/form_container_widget.dart';
 
 class UpdateHabitMainPage extends StatefulWidget {
   final HabitEntity habitEntity;
-  const UpdateHabitMainPage({super.key, required this.habitEntity});
+  final String selectedDay;
+
+  const UpdateHabitMainPage(
+      {super.key, required this.habitEntity, required this.selectedDay});
 
   @override
   State<UpdateHabitMainPage> createState() => _UpdateHabitMainPageState();
@@ -20,10 +24,20 @@ class _UpdateHabitMainPageState extends State<UpdateHabitMainPage> {
   bool isTitleEmpty = false;
   int pickedColor = 0;
   @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    executionFrequencyController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     titleController = TextEditingController(text: widget.habitEntity.title);
-    descriptionController = TextEditingController(text: widget.habitEntity.description);
-    executionFrequencyController = TextEditingController(text: widget.habitEntity.executionFrequency);
+    descriptionController =
+        TextEditingController(text: widget.habitEntity.description);
+    executionFrequencyController =
+        TextEditingController(text: widget.habitEntity.executionFrequency);
 
     titleController.addListener(_onTextChanged);
     super.initState();
@@ -92,14 +106,16 @@ class _UpdateHabitMainPageState extends State<UpdateHabitMainPage> {
               child: ElevatedButton.icon(
                   onPressed: () {
                     BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEvent(
+                        day: widget.selectedDay,
                         habitEntity: HabitEntity(
                           habitId: widget.habitEntity.habitId,
-                      title: titleController.text,
-                      description: descriptionController.text,
-                      executionFrequency:
-                          executionFrequencyController.text.toString(),
-                      color: pickedColor,
-                    )));
+                          title: titleController.text,
+                          description: descriptionController.text,
+                          isCompleted: widget.habitEntity.isCompleted,
+                          executionFrequency:
+                              executionFrequencyController.text.toString(),
+                          color: pickedColor,
+                        )));
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.update),

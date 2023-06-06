@@ -22,8 +22,10 @@ class LoadDataHabitEvent extends HabitsEvent {
 
 class UpdateHabitEvent extends HabitsEvent {
   final HabitEntity habitEntity;
+  final String day;
   const UpdateHabitEvent({
     required this.habitEntity,
+    required this.day,
   });
 }
 class DeleteHabitEvent extends HabitsEvent {
@@ -34,7 +36,9 @@ class DeleteHabitEvent extends HabitsEvent {
 }
 class GetHabitsEvent extends HabitsEvent {
   final String uid;
+  final String dayString;
   const GetHabitsEvent({
     required this.uid,
+    required this.dayString,
   });
 }

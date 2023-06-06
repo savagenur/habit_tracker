@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_tracker/features/presentation/bloc/calendar/bloc/calendar_bloc.dart';
 import 'package:habit_tracker/features/presentation/cubit/auth/cubit/auth_cubit.dart';
 import 'package:habit_tracker/features/presentation/cubit/credential/cubit/credential_cubit.dart';
 import 'package:habit_tracker/on_generate_route.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => di.sl<UserCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => di.sl<CalendarBloc>(),
         ),
       ],
       child: MaterialApp(

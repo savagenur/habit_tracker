@@ -8,13 +8,14 @@ import '../../../domain/entities/habit/habit_entity.dart';
 
 class UpdateHabitPage extends StatelessWidget {
   final HabitEntity habitEntity;
-  const UpdateHabitPage({super.key, required this.habitEntity});
+  final String selectedDay;
+  const UpdateHabitPage({super.key, required this.habitEntity, required this.selectedDay});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => di.sl<HabitsBloc>(),
-      child: UpdateHabitMainPage(habitEntity: habitEntity),
+      child: UpdateHabitMainPage(habitEntity: habitEntity, selectedDay: selectedDay,),
     );
   }
 }

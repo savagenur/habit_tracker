@@ -33,7 +33,7 @@ class OnGenerateRoute {
         return routBuilder(const CreateHabitPage());
       case PageConst.updateHabitPage:
         args as UpdateHabitPage;
-        return routBuilder(UpdateHabitPage(habitEntity: args.habitEntity,));
+        return routBuilder(UpdateHabitPage(habitEntity: args.habitEntity, selectedDay: args.selectedDay,));
       default:
         return routBuilder(const NoPageFound());
     }

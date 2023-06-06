@@ -7,7 +7,7 @@ class GetHabitsUsecase {
     required this.repository,
   });
 
-  Stream<List<HabitEntity>> call(String uid) {
-    return repository.getHabits( uid);
+  Stream<List<HabitEntity>> call(String uid,String dayString) {
+    return repository.getHabits( uid,dayString);
   }
 }

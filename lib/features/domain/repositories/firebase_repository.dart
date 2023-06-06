@@ -28,11 +28,15 @@ abstract class FirebaseRepository {
   Future<void> copyCollection(
       {required sourceCollection,
       required destCollection,
-      bool isNewDay = false,bool isDelete=false});
+      bool isNewDay = false,
+      bool isDelete = false});
   Future<void> updateDatabaseHabit();
   Future<List> getListOfCollHabit();
   Future<void> createHabit({required HabitEntity habitEntity});
-  Future<void> updateHabit(HabitEntity habitEntity);
+  Future<void> updateHabit(HabitEntity habitEntity,String day);
   Future<void> deleteHabit(String habitId);
-  Stream<List<HabitEntity>> getHabits(String uid);
+  Stream<List<HabitEntity>> getHabits(String uid,String dayString);
+
+  // Calendar
+  Future<Map> getCalendarDoneMap(String uid);
 }

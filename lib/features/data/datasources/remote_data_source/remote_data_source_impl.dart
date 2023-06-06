@@ -230,7 +230,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   @override
   Future<void> deleteHabit(String habitId) async {
     final uid = await getCurrentUid();
-    
+
     final collectionPaths = await getListOfCollHabit();
     WriteBatch batch = FirebaseFirestore.instance.batch();
     for (String path in collectionPaths) {
@@ -245,11 +245,11 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
-  Stream<List<HabitEntity>> getHabits(String uid) {
+  Stream<List<HabitEntity>> getHabits(String uid, String dayString) {
     final todaysHabitList = firebaseFirestore
         .collection(FirebaseConst.habits)
         .doc(uid)
-        .collection(FirebaseConst.todaysHabitList);
+        .collection(dayString);
 
     return todaysHabitList
         .orderBy("createdAt", descending: true)
@@ -358,30 +358,111 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
-  Future<void> updateHabit(HabitEntity habitEntity) async {
+  Future<void> updateHabit(HabitEntity habitEntity, String day) async {
     final uid = await getCurrentUid();
-    final todaysHabitList = firebaseFirestore
-        .collection(FirebaseConst.habits)
-        .doc(uid)
-        .collection(FirebaseConst.todaysHabitList);
 
-    Map<String, dynamic> habitInformation = {};
-    if (habitEntity.title != '' && habitEntity.title != null) {
-      habitInformation['title'] = habitEntity.title;
-    }
-    if (habitEntity.description != '' && habitEntity.description != null) {
-      habitInformation['description'] = habitEntity.description;
-    }
-    // ignore: unrelated_type_equality_checks
-    if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
-      habitInformation['isCompleted'] = habitEntity.isCompleted;
+    if (day == todaysDateFormatted()) {
+      final todaysHabitList = firebaseFirestore
+          .collection(FirebaseConst.habits)
+          .doc(uid)
+          .collection(FirebaseConst.todaysHabitList);
+
+      Map<String, dynamic> habitInformation = {};
+      if (habitEntity.title != '' && habitEntity.title != null) {
+        habitInformation['title'] = habitEntity.title;
+      }
+      if (habitEntity.description != '' && habitEntity.description != null) {
+        habitInformation['description'] = habitEntity.description;
+      }
+      // ignore: unrelated_type_equality_checks
+      if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
+        habitInformation['isCompleted'] = habitEntity.isCompleted;
+      }
+
+      try {
+        await todaysHabitList.doc(habitEntity.habitId).update(habitInformation);
+      } catch (e) {
+        toast("$e");
+      }
+      await updateDatabaseHabit();
+    } else {
+      final todaysHabitList = firebaseFirestore
+          .collection(FirebaseConst.habits)
+          .doc(uid)
+          .collection(day);
+
+      Map<String, dynamic> habitInformation = {};
+      if (habitEntity.title != '' && habitEntity.title != null) {
+        habitInformation['title'] = habitEntity.title;
+      }
+      if (habitEntity.description != '' && habitEntity.description != null) {
+        habitInformation['description'] = habitEntity.description;
+      }
+      // ignore: unrelated_type_equality_checks
+      if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
+        habitInformation['isCompleted'] = habitEntity.isCompleted;
+      }
+
+      try {
+        await todaysHabitList.doc(habitEntity.habitId).update(habitInformation);
+      } catch (e) {
+        toast("$e");
+      }
     }
 
-    try {
-      await todaysHabitList.doc(habitEntity.habitId).update(habitInformation);
-    } catch (e) {
-      toast("$e");
+    
+  }
+
+  @override
+  Future<Map> getCalendarDoneMap(String uid) async {
+    final Map habitsMap = {};
+    final Map habitsDoneMap = {};
+
+    final collections =
+        await FirebaseFirestore.instance.collection("habits").doc(uid).get();
+    final List<dynamic> collectionList =
+        await collections.get("collectionList");
+    for (var element in collectionList) {
+      if (element != "todaysHabitList" && element != "currentHabitList") {
+        final QuerySnapshot<Map<String, dynamic>> dateTimeCol =
+            await FirebaseFirestore.instance
+                .collection("habits")
+                .doc(uid)
+                .collection(element)
+                .get();
+        final QuerySnapshot<Map<String, dynamic>> dateTimeDoneCol =
+            await FirebaseFirestore.instance
+                .collection("habits")
+                .doc(uid)
+                .collection(element)
+                .where("isCompleted", isEqualTo: true)
+                .get();
+        final List<HabitEntity> habits = [];
+        // trying
+        // var value = ((dateTimeDoneCol.size / dateTimeCol.size) * 10).toInt();
+        // element = createDateTimeObject(element);
+
+        // done
+        for (var habit in dateTimeCol.docs) {
+          habits.add(HabitModel.fromSnapshot(habit));
+        }
+        element = createDateTimeObject(element);
+
+        habitsMap.addAll({element: habits});
+
+        // for dateTimeDoneCol
+        final List<HabitEntity> habitsDone = [];
+
+        for (var habit in dateTimeDoneCol.docs) {
+          habitsDone.add(HabitModel.fromSnapshot(habit));
+        }
+        habitsDoneMap.addAll({element: habitsDone});
+        final int value =
+            ((habitsDoneMap[element].length / habitsMap[element].length) * 10)
+                .toInt();
+        habitsDoneMap.addAll({element: value});
+      }
     }
-    await updateDatabaseHabit();
+    return habitsDoneMap;
   }
 }

@@ -56,11 +56,12 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   Future<void> copyCollection(
       {required sourceCollection,
       required destCollection,
-      bool isNewDay = false,bool isDelete=false}) async {
+      bool isNewDay = false,
+      bool isDelete = false}) async {
     return remoteDataSource.copyCollection(
-        sourceCollection: sourceCollection,
-        destCollection: destCollection,
-        );
+      sourceCollection: sourceCollection,
+      destCollection: destCollection,
+    );
   }
 
   @override
@@ -73,7 +74,8 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       remoteDataSource.deleteHabit(habitId);
 
   @override
-  Stream<List<HabitEntity>> getHabits(String uid)  => remoteDataSource.getHabits(uid);
+  Stream<List<HabitEntity>> getHabits(String uid,String dayString) =>
+      remoteDataSource.getHabits(uid,dayString);
 
   @override
   Future<List> getListOfCollHabit() async =>
@@ -90,6 +92,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       remoteDataSource.updateDatabaseHabit();
 
   @override
-  Future<void> updateHabit(HabitEntity habitEntity) async =>
-      remoteDataSource.updateHabit(habitEntity);
+  Future<void> updateHabit(HabitEntity habitEntity,String day) async =>
+      remoteDataSource.updateHabit(habitEntity,day);
+
+  @override
+  Future<Map> getCalendarDoneMap(String uid) async =>
+      remoteDataSource.getCalendarDoneMap(uid);
 }

@@ -6,7 +6,9 @@ import 'package:habit_tracker/features/data/datasources/remote_data_source/remot
 import 'package:habit_tracker/features/data/datasources/remote_data_source/remote_data_source_impl.dart';
 import 'package:habit_tracker/features/data/repositories/firebase_repository_impl.dart';
 import 'package:habit_tracker/features/domain/repositories/firebase_repository.dart';
+import 'package:habit_tracker/features/domain/usecases/firebase_usecases/calendar/get_calendar_done_map_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/habit/get_started_at_usecase.dart';
+import 'package:habit_tracker/features/domain/usecases/firebase_usecases/habit/update_dataabase_habit_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/storage/upload_image_to_storage_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/create_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/create_user_with_image_usecase.dart';
@@ -18,6 +20,7 @@ import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/si
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_out_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/sign_up_user_usecase.dart';
 import 'package:habit_tracker/features/domain/usecases/firebase_usecases/user/update_user_usecase.dart';
+import 'package:habit_tracker/features/presentation/bloc/calendar/bloc/calendar_bloc.dart';
 import 'package:habit_tracker/features/presentation/bloc/habits/bloc/habits_bloc.dart';
 import 'package:habit_tracker/features/presentation/cubit/auth/cubit/auth_cubit.dart';
 import 'package:habit_tracker/features/presentation/cubit/credential/cubit/credential_cubit.dart';
@@ -53,8 +56,9 @@ Future<void> init() async {
       createHabitUsecase: sl.call(),
       deleteHabitUsecase: sl.call(),
       updateHabitUsecase: sl.call(),
-      getStartedAtUsecase: sl.call()));
+      getStartedAtUsecase: sl.call(), updateDatabaseHabitUsecase: sl.call()));
 
+  sl.registerFactory(() => CalendarBloc(getCalendarDoneMapUsecase: sl.call()));
   // UseCases
 
   sl.registerLazySingleton(() => SignOutUsecase(repository: sl.call()));
@@ -80,6 +84,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteHabitUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => UpdateHabitUsecase(repository: sl.call()));
   sl.registerLazySingleton(() => GetStartedAtUsecase(repository: sl.call()));
+  sl.registerLazySingleton(() => UpdateDatabaseHabitUsecase(repository: sl.call()));
+
+  // Calendar UseCases
+  sl.registerLazySingleton(
+      () => GetCalendarDoneMapUsecase(repository: sl.call()));
 
   // Repository
   sl.registerLazySingleton<FirebaseRepository>(
