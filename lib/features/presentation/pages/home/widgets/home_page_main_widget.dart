@@ -53,14 +53,7 @@ class _HomePageMainWidgetState extends State<HomePageMainWidget> {
                 },
                 child: const Icon(Icons.person),
               ),
-              actions: [
-                GestureDetector(
-                  onTap: () {
-                    // getMapForCalendar();
-                  },
-                  child: Icon(Icons.edit),
-                )
-              ],
+              
               title: GestureDetector(
                 onTap: () {
                   BlocProvider.of<AuthCubit>(context).loggedOut();
@@ -109,39 +102,43 @@ class _HomePageMainWidgetState extends State<HomePageMainWidget> {
                           return BlocBuilder<CalendarBloc, CalendarState>(
                             builder: (context, calendarState) {
                               if (calendarState is CalendarLoaded) {
-                                return HabitTile(
-                                  habitName: habitsState.habits[index].title!,
-                                  habitCompleted:
-                                      habitsState.habits[index].isCompleted!,
-                                  onChanged: (value) {
-                                    var habit = habitsState.habits[index];
-                                    var updatedHabit =
-                                        habit.copyWith(isCompleted: value);
-                                    BlocProvider.of<HabitsBloc>(context)
-                                        .add(UpdateHabitEvent(
-                                      habitEntity: updatedHabit,
-                                      day: calendarState.selectedDay,
-                                      habitId:
-                                          habitsState.habits[index].habitId!,
-                                      isChangedOnlyCheckBool: true,
-                                    ));
-                                  },
-                                  deleteTapped: (context) {
-                                    BlocProvider.of<HabitsBloc>(context).add(
-                                        DeleteHabitEvent(
-                                            habitId: habitsState
-                                                .habits[index].habitId!));
-                                  },
-                                  settingsTapped: (context) {
-                                    Navigator.pushNamed(
-                                        context, PageConst.updateHabitPage,
-                                        arguments: UpdateHabitPage(
-                                          habitEntity:
-                                              habitsState.habits[index],
-                                          selectedDay:
-                                              calendarState.selectedDay,
-                                        ));
-                                  },
+                                return BlocProvider.value(
+                                  value: BlocProvider.of<HabitsBloc>(context),
+                                  child: HabitTile(
+                                    habitName: habitsState.habits[index].title!,
+                                    habitCompleted:
+                                        habitsState.habits[index].isCompleted!,
+                                    onChanged: (value) {
+                                      var habit = habitsState.habits[index];
+                                      var updatedHabit =
+                                          habit.copyWith(isCompleted: value);
+                                      BlocProvider.of<HabitsBloc>(context)
+                                          .add(UpdateHabitEvent(
+                                        habitEntity: updatedHabit,
+                                        day: calendarState.selectedDay,
+                                        habitId:
+                                            habitsState.habits[index].habitId!,
+                                        isChangedOnlyCheckBool: true,
+                                      ));
+                                    },
+                                    deleteTapped: (context) {
+                                      BlocProvider.of<HabitsBloc>(context).add(
+                                          DeleteHabitEvent(
+                                              habitId: habitsState
+                                                  .habits[index].habitId!));
+                                    },
+                                    settingsTapped: (context) {
+                                      Navigator.pushNamed(
+                                          context, PageConst.updateHabitPage,
+                                          arguments: UpdateHabitPage(
+                                            uid: widget.uid,
+                                            habitEntity:
+                                                habitsState.habits[index],
+                                            selectedDay:
+                                                calendarState.selectedDay,
+                                          ));
+                                    },
+                                  ),
                                 );
                               }
                               return Padding(

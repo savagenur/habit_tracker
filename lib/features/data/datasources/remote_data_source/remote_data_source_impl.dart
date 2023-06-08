@@ -366,9 +366,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         .collection(FirebaseConst.habits)
         .doc(uid)
         .collection(day);
-
 // for Today
-    if (day == FirebaseConst.todaysHabitList) {
+    if (day == todaysDateFormatted()) {
       final todaysHabitList = firebaseFirestore
           .collection(FirebaseConst.habits)
           .doc(uid)
@@ -379,12 +378,12 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
           habitInformation['isCompleted'] = habitEntity.isCompleted;
         }
-        await updateDatabaseHabit();
 
         try {
           await todaysHabitList
               .doc(habitEntity.habitId)
               .update(habitInformation);
+          await updateDatabaseHabit();
         } catch (e) {
           toast("$e");
         }
@@ -409,7 +408,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
               .doc(uid)
               .collection(path)
               .doc(habitId);
-          batch.update(docRef, habitInformation);
+          batch.set(docRef, habitInformation,SetOptions(merge: true));
         }
         await batch.commit();
       }
@@ -420,7 +419,6 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         if (habitEntity.isCompleted != '' && habitEntity.isCompleted != null) {
           habitInformation['isCompleted'] = habitEntity.isCompleted;
         }
-
         try {
           await todaysHabitList
               .doc(habitEntity.habitId)
@@ -449,6 +447,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
               .doc(uid)
               .collection(path)
               .doc(habitId);
+
           batch.update(docRef, habitInformation);
         }
         await batch.commit();
@@ -500,10 +499,15 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
           habitsDone.add(HabitModel.fromSnapshot(habit));
         }
         habitsDoneMap.addAll({element: habitsDone});
-        final int value =
-            ((habitsDoneMap[element].length / habitsMap[element].length) * 10)
-                .toInt();
-        habitsDoneMap.addAll({element: value});
+        if (habitsDoneMap[element].length != 0 ||
+            habitsMap[element].length != 0) {
+          final int value =
+              ((habitsDoneMap[element].length / habitsMap[element].length) * 10)
+                  .toInt();
+          habitsDoneMap.addAll({element: value});
+        } else {
+          habitsDoneMap.addAll({element: 0});
+        }
       }
     }
     return habitsDoneMap;

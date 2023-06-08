@@ -57,11 +57,14 @@ class HabitTile extends StatelessWidget {
               ),
 
               // habit name
-              Text(
-                habitName,
-                style: const TextStyle(fontSize: 18),
+              Expanded(
+                child: Text(
+                  habitName,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 18),
+                ),
               ),
-              const Spacer(),
               const Icon(
                 Icons.keyboard_double_arrow_left_rounded,
                 size: 30,

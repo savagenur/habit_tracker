@@ -29,19 +29,19 @@ class CalendarWidget extends StatefulWidget {
 class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  CalendarFormat _format = CalendarFormat.month;
+  CalendarFormat _format = CalendarFormat.twoWeeks;
 
   final Map colorsets = {
-    1: Color.fromARGB(20, 2, 179, 8),
-    2: Color.fromARGB(40, 2, 179, 8),
-    3: Color.fromARGB(60, 2, 179, 8),
-    4: Color.fromARGB(80, 2, 179, 8),
-    5: Color.fromARGB(100, 2, 179, 8),
-    6: Color.fromARGB(120, 2, 179, 8),
-    7: Color.fromARGB(150, 2, 179, 8),
-    8: Color.fromARGB(180, 2, 179, 8),
-    9: Color.fromARGB(220, 2, 179, 8),
-    10: Color.fromARGB(255, 2, 179, 8),
+    1: Color.fromARGB(10, 2, 179, 8),
+    2: Color.fromARGB(30, 2, 179, 8),
+    3: Color.fromARGB(50, 2, 179, 8),
+    4: Color.fromARGB(70, 2, 179, 8),
+    5: Color.fromARGB(90, 2, 179, 8),
+    6: Color.fromARGB(110, 2, 179, 8),
+    7: Color.fromARGB(140, 2, 179, 8),
+    8: Color.fromARGB(160, 2, 179, 8),
+    9: Color.fromARGB(200, 2, 179, 8),
+    10: Color.fromARGB(225, 2, 179, 8),
   };
   @override
   void initState() {
@@ -53,10 +53,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     final backgroundColor = colorsets[widget.habitsDoneMap[date]];
 
     return Container(
-      margin: EdgeInsets.all(2),
+      margin: EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(100),
       ),
       child: Stack(
         children: [
@@ -70,10 +70,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             ),
           ),
           widget.habitsDoneMap[date] == 10
-              ? Positioned(
+              ? const Positioned(
                   bottom: 0,
                   right: 2,
-                  child: Icon(Icons.done_all),
+                  child: Icon(Icons.done_all,size: 20,),
                 )
               : Container(),
         ],
@@ -93,11 +93,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           _format = format;
         });
       },
+      calendarStyle: CalendarStyle(
+        selectedDecoration: BoxDecoration(
+          color: Colors.blue
+        )
+      ),
       onDaySelected: (selectedDay, focusedDay) {
         if (!isSameDay(_selectedDay, selectedDay) && widget.isTouchable) {
-          BlocProvider.of<HabitsBloc>(context).add(GetHabitsEvent(
-              uid: widget.uid,
-              dayString: convertDateTimeToString(selectedDay)));
+          if (convertDateTimeToString(selectedDay) == todaysDateFormatted()) {
+            BlocProvider.of<HabitsBloc>(context).add(
+                GetHabitsEvent(uid: widget.uid, dayString: "todaysHabitList"));
+          } else {
+            BlocProvider.of<HabitsBloc>(context).add(GetHabitsEvent(
+                uid: widget.uid,
+                dayString: convertDateTimeToString(selectedDay)));
+          }
           BlocProvider.of<CalendarBloc>(context).add(SelectDayCalendarEvent(
               dateTime: selectedDay, habitsMap: widget.habitsDoneMap));
           setState(() {

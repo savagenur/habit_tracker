@@ -9,9 +9,13 @@ import 'package:habit_tracker/features/presentation/widgets/form_container_widge
 class UpdateHabitMainPage extends StatefulWidget {
   final HabitEntity habitEntity;
   final String selectedDay;
+  final String uid;
 
   const UpdateHabitMainPage(
-      {super.key, required this.habitEntity, required this.selectedDay});
+      {super.key,
+      required this.habitEntity,
+      required this.selectedDay,
+      required this.uid});
 
   @override
   State<UpdateHabitMainPage> createState() => _UpdateHabitMainPageState();
@@ -118,6 +122,7 @@ class _UpdateHabitMainPageState extends State<UpdateHabitMainPage> {
                               executionFrequencyController.text.toString(),
                           color: pickedColor,
                         )));
+
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.update),
